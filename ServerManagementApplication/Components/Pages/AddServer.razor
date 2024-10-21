@@ -1,0 +1,73 @@
+﻿
+@page "/servers/add";
+@inject NavigationManager NavManager
+<h3>Add Server</h3>
+<br />
+@if (server != null)
+{
+    <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Name</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="server.Name"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="()=>server.Name"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">City</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="server.City"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="()=>server.City"></ValidationMessage>
+            </div>
+        </div>
+
+
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Online</label>
+            </div>
+            <div class="col-6">
+                <InputCheckbox @bind-Value="server.IsOnline"></InputCheckbox>
+            </div>
+
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Save</button>
+        &nbsp;
+        <a href="/servers" class="btn btn-primary">Close</a>
+    </EditForm>
+
+}
+@code {
+    [SupplyParameterFromForm(FormName = "formServer")]
+    private ServerDescription? server { get; set; } = new ServerDescription() { IsOnline=false};
+ 
+
+    private async Task Submit()
+    {
+        if (server != null)
+        {
+            // Update the server in the repository
+             ServersRepository.AddServer(server);
+            //await Task.Delay(100);
+            NavManager.NavigateTo("/servers");
+        }
+    }
+}
+
+
+
+
+
+
